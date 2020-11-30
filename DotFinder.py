@@ -4,30 +4,20 @@ import io
 import os
 from time import sleep
 import numpy as np
-import multiprocessing
 
 def CameraSetup():
-    os.mkfifo('video_fifo')
     Camera = picamera.PiCamera()
-    Camera.start_preview()
+    Camera.add_overlay()
     #Camera warm-up time
     sleep(2)
-    CameraStreamIn, CameraStreamOut = MakeVideoPipe(Camera) #change to whatever stream object I end up
-    #using
-    return CameraStreamOut
-
-def SendVideo(CameraStreamIn, Camera):
-    Camera.start_recording(CameraStreamIn, 'bgr')   #bgr is the preferred format for OpenCV
-    CameraStreamIn.send()
-    CameraStreamIn.close()
-
-def ReceiveVideo(CameraStreamOut):
-    CameraStreamOut.recv()
-    CameraStreamOut.close()
+    CameraStream = Camera.PiCameraCircularIO(Camera, seconds = 5)   #replace seconds with OpenCV
+    #documented number (can also specify bytes if OpenCV specifies a number of bytes needed)
+    Camera.start_recording(CameraStream, 'bgr') #using bgr because OpenCV works with that format
+    return CameraStream
 
 def IsolateRedDot(CameraStream):
     CVCameraObject=cv.VideoCapture(CameraStream)
-    while(1):
+    while(CVCameraObject.isOpened()):
         _, frame = CVCameraObject.read()
         #Convert BGR to HSV
         hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
@@ -43,17 +33,15 @@ def IsolateRedDot(CameraStream):
         cv.imshow('mask',mask)
         cv.imshow('res', res)
         k = cv.waitKey(5) & 0xFF
-        if k==27:
-	    cv.destroyAllWindows()
-	    Camera.stop_recording()
-	    Camera.stop_preview()
-	    os.unlink('video_fifo')
-            break
+        #if k==27:
+	#    cv.destroyAllWindows()
+	#    Camera.stop_recording()
+	#    Camera.stop_preview()
+	#    break
     
     cv.destroyAllWindows()
     Camera.stop_recording()
     Camera.stop_preview()
-    os.unlink('video_fifo')
     return Camera
 
 def ReturnRedDotCenter(Camera):

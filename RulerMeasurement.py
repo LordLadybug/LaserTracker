@@ -2,9 +2,9 @@ class RulerMeasurement:
     Measurement = 0.0
     units = "cm"
 
-    def ReadMeasurement(Camera):
-	#returns a measurement by reading the ruler
+#returns a measurement by reading the ruler
 	#define enum based on whether we're working in inches or cm
+    def ReadMeasurement(Camera):
 	Measurement = 0.0
 	units = FindUnits(Camera)
 	Markings = CountMarkings(Camera)
@@ -14,6 +14,11 @@ class RulerMeasurement:
 	     else if (units = "cm"):
 		 Measurement += 0.1
 	return Measurement
+
+    def CountMarkings(Camera):
+	NumberofMarkings = 0
+#insert code to find nearest marked number and then count tick marks up to red dot
+	return NumberofMarkings
 
     def FindUnits(Camera):
 	#For now, default to cm
