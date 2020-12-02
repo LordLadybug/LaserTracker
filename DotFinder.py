@@ -4,23 +4,37 @@ import io
 import os
 from time import sleep
 import numpy as np
+import CameraCVInterface
 
 def CameraSetup():
+	#Camera.resolution = (320, 240)
+	#Camera.framerate = 24
+	#image = np.empty((240 * 320 * 3,), dtype=np.uint8)
+	#code above may not be necessary?
     Camera = picamera.PiCamera()
-    Camera.add_overlay()
+    Camera.start_preview()
     #Camera warm-up time
     sleep(2)
-    CameraStream = Camera.PiCameraCircularIO(Camera, seconds = 5)   #replace seconds with OpenCV
+#possibly replace with only capturing single images? or wait for an image with red in it, then use
+	#that image for processing?
+    CameraStream = picamera.PiCameraCircularIO(Camera, seconds = 5)   #replace seconds with OpenCV
     #documented number (can also specify bytes if OpenCV specifies a number of bytes needed)
     Camera.start_recording(CameraStream, 'bgr') #using bgr because OpenCV works with that format
     return CameraStream
 
 def IsolateRedDot(CameraStream):
-    CVCameraObject=cv.VideoCapture(CameraStream)
-    while(CVCameraObject.isOpened()):
-        _, frame = CVCameraObject.read()
+    #CVCameraObject=cv.VideoCapture(0)
+	CVvideo = CameraCVInterface()
+	while(CVvideo.is_good()):
+	#while(CVCameraObject.isOpened()):
+        #frame_exists, frame = CVCameraObject.read()
         #Convert BGR to HSV
-        hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
+	#	if (frame_exists):
+	#		hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
+	#	else:
+	#		EmptyFrameErrorCleanup()
+		frame = CVvideo.GrabFrame()
+		hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
         #define range of red colors(use HSV scale)
         lower_red = np.array([0,100,31])
@@ -39,9 +53,12 @@ def IsolateRedDot(CameraStream):
 	#    Camera.stop_preview()
 	#    break
     
+#bunch of cleanup code, may need to be put elsewhere
     cv.destroyAllWindows()
+	cv.ReleaseCapture()
     Camera.stop_recording()
     Camera.stop_preview()
+	CameraStream.clear()
     return Camera
 
 def ReturnRedDotCenter(Camera):

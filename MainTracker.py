@@ -17,6 +17,23 @@ def TestTrackingSpeed():
     TrackingSpeed = timeit.timeit(CenterCameraonRedDot(CameraObject, RedDot))
     assert(TrackingSpeed < 0.1)
 
+def LaserisinFrame():
+    #can attempt to find the laser somewhere within camera range of motion by bisection
+    TestAngle = 90
+    ServoControl.SwivelToAngle(TestAngle, PWM)
+    LaserLocation = DotFinder.ReturnRedDotCenter(LaserCamera)
+    if (LaserLocation == None):
+        ServoControl.SwivelToAngle(TestAngle/2, PWM)
+        LaserLocation = DotFinder.ReturnRedDotCenter(LaserCamera)
+        if (LaserLocation == None):
+            TestAngle = TestAngle*3 / 2
+            ServoControl.SwivelToAngle(TestAngle, PWM)
+    #Can easily turn this into a recursive function to first sweep left, then sweep right
+    if (LaserLocation == None):
+        return False
+    else:
+        return True
+
 
 #some quick self-tests
 ServoControl.ServoSetup(17)	#17 is just one possible choice for gpio pin
