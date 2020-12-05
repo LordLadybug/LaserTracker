@@ -3,28 +3,29 @@ import DotFinder
 import RulerMeasurement
 import timeit
 
-def CenterCameraonRedDot(Camera, LaserLocation):
+def CenterCameraonRedDot(LaserLocation):
+    Camera_width = 80
     #Calculate center from frame data
     #LaserLocation comes back as pair of integer coords within camera frame
-    HorizontalError = (LaserLocation.first() - Camera.width()/2) / Camera.width() #relative error
+    HorizontalError = (LaserLocation.first() - Camera_width/2) / Camera_width #relative error
     ServoControl.CorrectCameraPosition(PWM, HorizontalError)
     
 def TestTrackingSpeed():
     ServoControl.Swivel(PWM) #randomize location
-    CameraObject = DotFinder.CameraSetup()
+    #CameraObject = DotFinder.CameraSetup()
     #start timing here
-    RedDot = DotFinder.ReturnRedDotCenter(CameraObject)
-    TrackingSpeed = timeit.timeit(CenterCameraonRedDot(CameraObject, RedDot))
+    RedDot = DotFinder.ReturnRedDotCenter()
+    TrackingSpeed = timeit.timeit(CenterCameraonRedDot(RedDot))
     assert(TrackingSpeed < 0.1)
 
 def LaserisinFrame():
     #can attempt to find the laser somewhere within camera range of motion by bisection
     TestAngle = 90
     ServoControl.SwivelToAngle(TestAngle, PWM)
-    LaserLocation = DotFinder.ReturnRedDotCenter(LaserCamera)
+    LaserLocation = DotFinder.ReturnRedDotCenter()
     if (LaserLocation == None):
         ServoControl.SwivelToAngle(TestAngle/2, PWM)
-        LaserLocation = DotFinder.ReturnRedDotCenter(LaserCamera)
+        LaserLocation = DotFinder.ReturnRedDotCenter()
         if (LaserLocation == None):
             TestAngle = TestAngle*3 / 2
             ServoControl.SwivelToAngle(TestAngle, PWM)
@@ -41,8 +42,8 @@ PWM = ServoControl.ServoStart(17)
 ServoControl.Swivel(PWM) #done just to verify that servo code works
 #TestTrackingSpeed()	#use this when we want to test the 0.1 second tracking speed requirement
 
-LaserCamera = DotFinder.CameraSetup()
-LaserLocation = DotFinder.ReturnRedDotCenter(LaserCamera)
+#LaserCamera = DotFinder.CameraSetup()
+LaserLocation = DotFinder.ReturnRedDotCenter()
 print(LaserLocation)
 CenterCameraonRedDot(Camera, LaserLocation)
 FinalMeasurement = RulerMeasurement()
