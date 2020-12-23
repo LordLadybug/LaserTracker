@@ -1,7 +1,4 @@
 import cv2 as cv
-import io
-import os
-from time import sleep
 import numpy as np
 import CameraCVInterface
 
@@ -15,8 +12,12 @@ def IsolateRedDot():
 	i = 1
 	while(i < 100):
 		i += 1
-		frame = CVvideo.GrabFrame()
-		hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
+		try:
+			frame = CVvideo.GrabFrame()
+			hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
+
+		except ValueError:
+			CVvideo.EmptyFrameErrorCleanup()
 
            #Threshold image to filter for red colors
 		mask =cv.inRange(hsv, lower_red, upper_red)
