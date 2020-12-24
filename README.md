@@ -6,3 +6,6 @@ Laser tracking program that moves camera to keep laser pointer in focus; crude v
 - done in either python or c/c++(probably python)
 - add autostartup on boot and an issue tracker upon failure to do so, logs active processes and/or any error messages
 - tracker should be able to focus on the laser pointer in: 0.1 SECONDS
+
+To run:
+Can be run in python3 by running MainTracker.py
