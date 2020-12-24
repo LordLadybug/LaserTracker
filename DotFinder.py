@@ -9,31 +9,17 @@ upper_red = np.array([14, 100, 100])
 
 def IsolateRedDot():
 	CVvideo = CameraCVInterface.CameraCVInterface()
-	i = 1
-	while(i < 100):
-		i += 1
-		try:
-			frame = CVvideo.GrabFrame()
-			hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
-
-		except ValueError:
-			CVvideo.EmptyFrameErrorCleanup()
-
-           #Threshold image to filter for red colors
-		mask =cv.inRange(hsv, lower_red, upper_red)
-		res = cv.bitwise_and(frame, frame, mask= mask)
-		cv.imshow('frame',frame)
-		cv.imshow('mask',mask)
-		cv.imshow('res', res)
-		k = cv.waitKey(5) & 0xFF
-		if k==27:
-			cv.destroyAllWindows()
-			cv.ReleaseCapture()
-			break
-    
-#bunch of cleanup code, may need to be put elsewhere
-		cv.destroyAllWindows()
-		cv.ReleaseCapture()
+	try:
+		frame = CVvideo.GrabFrame()
+		hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
+	except ValueError:
+		CVvideo.EmptyFrameErrorCleanup()
+    #Threshold image to filter for red colors
+	mask =cv.inRange(hsv, lower_red, upper_red)
+	res = cv.bitwise_and(frame, frame, mask= mask)
+	cv.imshow('frame',frame)
+	cv.imshow('mask',mask)
+	cv.imshow('res', res)
 	return res
 
 def ReturnRedDotCenter():

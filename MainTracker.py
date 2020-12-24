@@ -4,7 +4,7 @@ import RulerMeasurement
 import timeit
 
 def CenterCameraonRedDot(LaserLocation):
-    Camera_width = 80
+    Camera_width = 320
     #Calculate center from frame data
     #LaserLocation comes back as pair of integer coords within camera frame
     HorizontalError = (LaserLocation.first() - Camera_width/2) / Camera_width #relative error
