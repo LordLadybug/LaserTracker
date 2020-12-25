@@ -4,10 +4,11 @@ import RulerMeasurement
 import timeit
 
 def CenterCameraonRedDot(LaserLocation):
-    Camera_width = 320
+    Camera_dims = DotFinder.Camera_res()
+    Camera_width = Camera_dims[0]
     #Calculate center from frame data
     #LaserLocation comes back as pair of integer coords within camera frame
-    HorizontalError = (LaserLocation.first() - Camera_width/2) / Camera_width #relative error
+    HorizontalError = (LaserLocation[0] - Camera_width/2) / Camera_width #relative error
     ServoControl.CorrectCameraPosition(PWM, HorizontalError)
     
 def TestTrackingSpeed():
@@ -42,10 +43,9 @@ PWM = ServoControl.ServoStart(17)
 ServoControl.Swivel(PWM) #done just to verify that servo code works
 #TestTrackingSpeed()	#use this when we want to test the 0.1 second tracking speed requirement
 
-#LaserCamera = DotFinder.CameraSetup()
 LaserLocation = DotFinder.ReturnRedDotCenter()
 print(LaserLocation)
-CenterCameraonRedDot(Camera, LaserLocation)
+CenterCameraonRedDot(LaserLocation)
 FinalMeasurement = RulerMeasurement()
 FinalMeasurement.ReadMeasurement()
 print(FinalMeasurement.measurement + " " + FinalMeasurement.units) 
