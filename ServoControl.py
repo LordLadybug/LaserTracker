@@ -12,10 +12,10 @@ class ServoAngle():
     MaxDutyCycle = 100
     MinDutyCycle = 0	#defaults to these unless otherwise specified
 
-    def AngleToDutyCycle(Angle):
+    def AngleToDutyCycle(self, Angle):
         return 0
 
-    def DutyCycleToAngle(DutyCycle):
+    def DutyCycleToAngle(self, DutyCycle):
         return 0
 
     def DutyCycleLimits():
@@ -57,6 +57,8 @@ def Swivel(p):
     except KeyboardInterrupt:
         p.stop()
         GPIO.cleanup()
+    p.stop()
+    GPIO.cleanup()
 
 def CorrectCameraPosition(p, HorizontalError):
     ErrorToDutyCycle = MaxDutyCycle*HorizontalError #replace with proper formula

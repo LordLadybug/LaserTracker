@@ -21,3 +21,5 @@ class CameraCVInterface():
 	def EmptyFrameErrorCleanup(self):
 		raise ValueError("OpenCV attempted to read an empty frame")
 
+	def get_resolution(self):
+		return self.Camera.resolution
