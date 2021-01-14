@@ -8,7 +8,7 @@ def CenterCameraonRedDot(LaserLocation):
     Camera_width = Camera_dims[0]
     #Calculate center from frame data
     #LaserLocation comes back as pair of integer coords within camera frame
-    HorizontalError = (LaserLocation[0] - Camera_width/2) / Camera_width #relative error
+    HorizontalError = (LaserLocation[0] - Camera_width/2) / (Camera_width/2) #relative error
     ServoControl.CorrectCameraPosition(PWM, HorizontalError)
     
 def TestTrackingSpeed():
@@ -38,9 +38,9 @@ def LaserisinFrame():
 
 
 #some quick self-tests
-ServoControl.ServoSetup(17)	#17 is just one possible choice for gpio pin
-PWM = ServoControl.ServoStart(17)
-ServoControl.Swivel(PWM) #done just to verify that servo code works
+#ServoControl.ServoSetup(17)	#17 is just one possible choice for gpio pin
+#PWM = ServoControl.ServoStart(17)
+#ServoControl.Swivel(PWM) #done just to verify that servo code works
 #TestTrackingSpeed()	#use this when we want to test the 0.1 second tracking speed requirement
 
 LaserLocation = DotFinder.ReturnRedDotCenter()

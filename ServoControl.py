@@ -61,7 +61,7 @@ def Swivel(p):
     GPIO.cleanup()
 
 def CorrectCameraPosition(p, HorizontalError):
-    ErrorToDutyCycle = MaxDutyCycle*HorizontalError #replace with proper formula
+    ErrorToDutyCycle = (MaxDutyCycle-MinDutyCycle)*HorizontalError/2 + (MaxDutyCycle+MinDutyCycle)/2
     p.ChangeDutyCycle(ErrorToDutyCycle)
 
 def SwivelToAngle(Angle, PWM):
