@@ -36,6 +36,11 @@ def LaserisinFrame():
     else:
         return True
 
+def DisplayMeasurement():
+	FinalMeasurement = RulerMeasurement()
+	FinalMeasurement.ReadMeasurement()
+	print(FinalMeasurement.measurement + " " + FinalMeasurement.units) 
+
 
 #some quick self-tests
 #ServoControl.ServoSetup(17)	#17 is just one possible choice for gpio pin
@@ -46,7 +51,4 @@ def LaserisinFrame():
 LaserLocation = DotFinder.ReturnRedDotCenter()
 print(LaserLocation)
 CenterCameraonRedDot(LaserLocation)
-FinalMeasurement = RulerMeasurement()
-FinalMeasurement.ReadMeasurement()
-print(FinalMeasurement.measurement + " " + FinalMeasurement.units) 
-
+DisplayMeasurement()
