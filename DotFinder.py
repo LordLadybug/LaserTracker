@@ -1,7 +1,6 @@
 import cv2 as cv
 import numpy as np
 import CameraCVInterface
-import unittest
 
 #define range of red colors(use HSV scale)
 #These are the cutoff values that we will use for the whole program
@@ -33,8 +32,8 @@ def ReturnRedDotCenter():
     ret, thresh = cv.threshold(isolated_frames, 127, 255, cv.THRESH_BINARY)
     contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 #RETURNS AN EMPTY LIST
-	if (contours is empty):
-		raise ValueError("Image contains no red dot")
+    if (len(contours) == 0):
+        raise ValueError("Image contains no red dot")
     cnt = contours[0]
     M = cv.moments(cnt)
     #save as a point to store the center of the red dot

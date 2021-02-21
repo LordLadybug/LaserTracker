@@ -20,18 +20,18 @@ TrackingWindow.columnconfigure(6, weight=1)
 TrackingWindow.rowconfigure(6, weight=1)
 
 #measurement number displayed at bottom of window
-Measurement = ttk.label(parent, text = "Measurement:  ")
-.Measurement configure -textvariable measureNo
-set measureNo "Measurement:  " + RulerMeasurement.ReadMeasurement()
+measureNo = StringVar()
+Measurement = ttk.Label(TrackingWindow, text = "Measurement:  ")
+measureNo.set("Measurement:  " + RulerMeasurement.ReadMeasurement())
 Measurement.grid(row=4, column=4, sticky=(E, S))
 
 #Test Tracking Speed
-SpeedTest = ttk.Button(parent, text = "Test tracking speed",
+SpeedTest = ttk.Button(TrackingWindow, text = "Test tracking speed",
 command=MainTracker.TestTrackingSpeed())
 SpeedTest.grid(column=1, row=0, sticky = (W))
 
 #start/stop tracking
-ToggleTracking = ttk.Button(parent, text = "Start/stop tracking", command=ToggleTrack)
+ToggleTracking = ttk.Button(TrackingWindow, text = "Start/stop tracking", command=ToggleTrack)
 ToggleTracking.grid(column = 4, row=0, sticky = (E))
 
 for child in TrackingWindow.winfo_children():
