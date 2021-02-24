@@ -24,7 +24,7 @@ def IsolateRedDot():
 	cv.imshow('frame',frame)
 	cv.imshow('mask',mask)
 	cv.imshow('res', res)
-	k = cv.waitKey()
+	#k = cv.waitKey()
 	return mask
 
 def ReturnRedDotCenter():
@@ -43,3 +43,11 @@ def ReturnRedDotCenter():
 
 def Camera_res():
     return CVvideo.get_resolution()
+
+def DotCount():
+	Red_Dot = IsolateRedDot()
+	DotArea = cv.ContourArea(contours[0])
+	DotFrame = cv.boundingRect(contours[0])
+	FrameArea = (DotFrame[1]-DotFrame[0])*(DotFrame[2]-DotFrame[1])
+	DotCount = int(FrameArea/DotArea)
+	return DotCount

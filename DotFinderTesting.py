@@ -4,21 +4,21 @@ import cv2 as cv
 
 class DotFinderTest(unittest.TestCase):
 	#test for frame grabbing a non-empty frame
-	def IsFrameEmpty():
+	def test_IsFrameEmpty(self):
 		frame = DotFinder.grabFrame()
 		self.assertFalse(frame is empty)
 
-	def FrameHasThreeChannels():
+	def test_FrameHasThreeChannels(self):
 		frame = DotFinder.grabFrame()
 		self.assertTrue(frame.dim[2] == 3)
 
-	def ConvertstoHSV():
+	def test_ConvertstoHSV(self):
 		try:
 			cv.cvtColor(frame, hsvFrame, cv.color_BGR2HSV)
 		except ValueError:
 			self.assertRaise(ValueError)
 
-	def CorrectLaserPattern():
+	def test_CorrectLaserPattern(self):
 		RedFrame = DotFinder.IsolateRedDot()
 		contours = (0, 0)
 		center, radius = cv.minEnclosingCircle(contours[0])
@@ -26,48 +26,61 @@ class DotFinderTest(unittest.TestCase):
 		self.asserTrue(cv.isContourConvex(contours[0]))
 
 
-	def CorrectDotSize():
+	def test_CorrectDotSize(self):
 		RedFrame = DotFinder.IsolateRedDot()
 		ScreenSize = DotFinder.getResolution()
 		DotSize = cv.contourArea(contours[0])
 		assertTrue(DotSize < ScreenSize/4) #dot takes up no more than a quarter of screen
 
-	def CorrectForeground():
+	def test_CorrectForeground(self):
 		self.assertTrue(CorrectLaserPattern())
 		self.assertTrue(CorrectDotSize())
 		#follows from above two test
 
-	def LowSensitivitytoDistractors():
-		DotCount = #Counts number of dot-like items found
+	def test_LowSensitivitytoDistractors(self):
+		DotCount = DotFinder.DotCount()
+		self.assertEquals(DotCount, 1)
 		#Compares contours found and can select the most dot-like (round) pattern
 
-	def CentroidOnCenter():
+	def test_CentroidOnCenter(self):
 		RedFrame = DotFinder.IsolateRedDot()
 		retval, cnt = cv.findContours(RedFrame)
 		moments = cv.moments(cnt)
-		geoCenter = #code to calculate geometric center of dot
+		geoCenter, geoRadius = cv.minEnclosingCircle(cnt[0])
 		self.assertEqual(geoCenter,int(moments['m10']/moments['m00']),
-		int(momentss['m01']/moments['m00']))
+		int(moments['m01']/moments['m00']))
 
+	def test_NoDivisionByZero(self):
+		NoZeroDivision = False
+		if (moments['m00'] != 0):
+			NoZeroDivision = True
+		self.assertTrue(NoZeroDivision)
 		#make sure no divisions by zero
 
 	#returns x-y coordinates
-	def Returnsxy():
+	def test_Returnsxy(self):
 		Dot = DotFinder.FindRedDot()
+		self.assertIsInstance(Dot, (int, int))
 		#assert that structure of Dot is an integer pair
 
-	def CoordsAreInFrame():
+	def test_CoordsAreInFrame(self):
 		Dot = DotFinder.FindRedDot()
 		ScreenSize = DotFinder.getResolution()
 		assertTrue(0<= Dot & Dot<=ScreenSize)
 
-	def NonEmptyContourList():
+	def test_NonEmptyContourList(self):
 		RedFrame = DotFinder.IsolateRedDot()
 		retval, cnt = cv.findContours(RedFrame)
 		assertFalse(cnt is empty)
 
-	def ContoursCenteronDot():
+	def test_ContoursCenteronDot(self):
+		self.assertTrue(1)
 		#define bounds for red dot, then assert contours[0] in inside bounds
 
-	def ContoursSensitivetoDistractors():
+	def test_ContoursSensitivetoDistractors(self):
+		self.assertTrue(1)
 		#Look for Contours[0] to follow the dot instead of other red objects
+		
+	#Running the tests:
+	if __name__ == '__main__':
+		unittest.main()
