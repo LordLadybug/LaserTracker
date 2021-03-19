@@ -3,66 +3,70 @@
 import RPi.GPIO as GPIO
 import time
 
-MaxDutyCycle = 10   #specific to the servos being used; highest position is 10% duty cycle at 50 hz
-MinDutyCycle = MaxDutyCycle/4	#specific to the servos being used, 2.5% being the lowest position
-#should create a data structure for specifying angle and defining its bounds to the max and min duty
-#cycle
-
 class ServoAngle():
     MaxDutyCycle = 100
     MinDutyCycle = 0	#defaults to these unless otherwise specified
+	MinAngle = 0
+	MaxAngle = 180		#maximum angle for a typical servo in degrees
 
     def AngleToDutyCycle(self, Angle):
-        return 0
+        return (MaxDutyCycle-MinDutyCycle) * (MaxAngle-Angle) / (MaxAngle-MinAngle)
 
     def DutyCycleToAngle(self, DutyCycle):
-        return 0
+        return (MaxAngle-MinAngle) * (MaxDutyCycle - DutyCycle) / (MaxDutyCycle - MinDutyCycle)
 
     def DutyCycleLimits():
         input(self.MinDutyCycle, "What is the minimum duty cycle?")
         input(self.MaxDutyCycle, "What is the maximum duty cycle?")
+
+MaxDutyCycle = 10   #specific to the servos being used; highest position is 10% duty cycle at 50 hz
+MinDutyCycle = MaxDutyCycle/4	#specific to the servos being used, 2.5% being the lowest position
+#should create a data structure for specifying angle and defining its bounds to the max and min duty
+#cycle
+#Note: no change in angles specified here for our particular servos
 
 def ServoSetup(pin):
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(pin, GPIO.OUT)
 
 def ServoStart(servoPIN):
-    p = GPIO.PWM(servoPIN, 50) # GPIO 17 for PWM with 50Hz
-    p.start(MaxDutyCycle/2) # Initialization
-    return p
+    ServoSetup(servoPIN)
+    pwm = GPIO.PWM(servoPIN, 50) # GPIO 17 for PWM with 50Hz
+    pwm.start(MaxDutyCycle/2) # Initialization
+    return pwm
 
-def Swivel(p):
+def Swivel(pwm):
     k=0
     try:
 	#per the datasheet, 5-10% covers the whole range of motion, should hardcode these limits or
 	#write in a way to configure servo characteristics into this code
         while k<10:
-            p.ChangeDutyCycle(5)
+            pwm.ChangeDutyCycle(5)
             time.sleep(0.5)
-            p.ChangeDutyCycle(7.5)
+            pwm.ChangeDutyCycle(7.5)
             time.sleep(0.5)
-            p.ChangeDutyCycle(10)
+            pwm.ChangeDutyCycle(10)
             time.sleep(0.5)
-            p.ChangeDutyCycle(12.5)
+            pwm.ChangeDutyCycle(12.5)
             time.sleep(0.5)
-            p.ChangeDutyCycle(10)
+            pwm.ChangeDutyCycle(10)
             time.sleep(0.5)
-            p.ChangeDutyCycle(7.5)
+            pwm.ChangeDutyCycle(7.5)
             time.sleep(0.5)
-            p.ChangeDutyCycle(5)
+            pwm.ChangeDutyCycle(5)
             time.sleep(0.5)
-            p.ChangeDutyCycle(2.5)
+            pwm.ChangeDutyCycle(2.5)
             time.sleep(0.5)
             k+=1
     except KeyboardInterrupt:
-        p.stop()
+        pwm.stop()
         GPIO.cleanup()
-    p.stop()
+    pwm.stop()
     GPIO.cleanup()
 
-def CorrectCameraPosition(p, HorizontalError):
+def CorrectCameraPosition(pwm, HorizontalError):
     ErrorToDutyCycle = (MaxDutyCycle-MinDutyCycle)*HorizontalError/2 + (MaxDutyCycle+MinDutyCycle)/2
-    p.ChangeDutyCycle(ErrorToDutyCycle)
+    pwm.ChangeDutyCycle(ErrorToDutyCycle)
 
-def SwivelToAngle(Angle, PWM):
-    p.ChangeDutyCycle( (MaxDutyCycle - MinDutyCycle) * Angle/180)	#replace with proper formula
+def SwivelToAngle(Angle, pwm):
+    pwm.ChangeDutyCycle(AngletoDutyCycle(Angle))

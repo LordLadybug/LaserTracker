@@ -37,14 +37,14 @@ def LaserisinFrame():
         return True
 
 def DisplayMeasurement():
-	FinalMeasurement = RulerMeasurement()
+	FinalMeasurement = RulerMeasurement.RulerMeasurement
 	FinalMeasurement.ReadMeasurement()
 	print(FinalMeasurement.measurement + " " + FinalMeasurement.units) 
 
 
 #some quick self-tests
 #ServoControl.ServoSetup(17)	#17 is just one possible choice for gpio pin
-#PWM = ServoControl.ServoStart(17)
+PWM = ServoControl.ServoStart(17)
 #ServoControl.Swivel(PWM) #done just to verify that servo code works
 #TestTrackingSpeed()	#use this when we want to test the 0.1 second tracking speed requirement
 
