@@ -6,8 +6,8 @@ import time
 class ServoAngle():
     MaxDutyCycle = 100
     MinDutyCycle = 0	#defaults to these unless otherwise specified
-	MinAngle = 0
-	MaxAngle = 180		#maximum angle for a typical servo in degrees
+    MinAngle = 0
+    MaxAngle = 180		#maximum angle for a typical servo in degrees
 
     def AngleToDutyCycle(self, Angle):
         return (MaxDutyCycle-MinDutyCycle) * (MaxAngle-Angle) / (MaxAngle-MinAngle)

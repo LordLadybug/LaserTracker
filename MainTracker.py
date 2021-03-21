@@ -16,7 +16,8 @@ def TestTrackingSpeed():
     #CameraObject = DotFinder.CameraSetup()
     #start timing here
     RedDot = DotFinder.ReturnRedDotCenter()
-    TrackingSpeed = timeit.timeit(CenterCameraonRedDot(RedDot))
+    #TrackingSpeed = timeit.timeit(CenterCameraonRedDot(RedDot))
+    TrackingSpeed = 10.0
     assert(TrackingSpeed < 0.1)
 
 def LaserisinFrame():
@@ -38,8 +39,8 @@ def LaserisinFrame():
 
 def DisplayMeasurement():
 	FinalMeasurement = RulerMeasurement.RulerMeasurement
-	FinalMeasurement.ReadMeasurement()
-	print(FinalMeasurement.measurement + " " + FinalMeasurement.units) 
+	FinalMeasurement.ReadMeasurement(FinalMeasurement)
+	print(FinalMeasurement.measurement, " " + FinalMeasurement.units) 
 
 
 #some quick self-tests

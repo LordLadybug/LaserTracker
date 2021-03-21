@@ -22,7 +22,7 @@ class DotFinderTest(unittest.TestCase):
 		RedFrame = DotFinder.IsolateRedDot()
 		contours = (0, 0)
 		center, radius = cv.minEnclosingCircle(contours[0])
-		self.assertEquals(math.pi()*radius**2, cv.contourArea(contours[0]))
+		self.assertEqual(math.pi()*radius**2, cv.contourArea(contours[0]))
 		self.asserTrue(cv.isContourConvex(contours[0]))
 
 
@@ -39,7 +39,7 @@ class DotFinderTest(unittest.TestCase):
 
 	def test_LowSensitivitytoDistractors(self):
 		DotCount = DotFinder.DotCount()
-		self.assertEquals(DotCount, 1)
+		self.assertEqual(DotCount, 1)
 		#Compares contours found and can select the most dot-like (round) pattern
 
 	def test_CentroidOnCenter(self):
