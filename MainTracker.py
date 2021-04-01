@@ -1,4 +1,5 @@
 import ServoControl
+import ServoTest
 import DotFinder
 import RulerMeasurement
 import timeit
@@ -12,7 +13,7 @@ def CenterCameraonRedDot(LaserLocation):
     ServoControl.CorrectCameraPosition(PWM, HorizontalError)
     
 def TestTrackingSpeed():
-    ServoControl.Swivel(PWM) #randomize location
+    ServoTest.Swivel(PWM) #randomize location
     #CameraObject = DotFinder.CameraSetup()
     #start timing here
     RedDot = DotFinder.ReturnRedDotCenter()
@@ -44,9 +45,12 @@ def DisplayMeasurement():
 
 
 #some quick self-tests
-#ServoControl.ServoSetup(17)	#17 is just one possible choice for gpio pin
-PWM = ServoControl.ServoStart(17)
-#ServoControl.Swivel(PWM) #done just to verify that servo code works
+try:
+    CameraServo = ServoControl.Servo(27)
+    ServoTest.Swivel(CameraServo.pwm) #done just to verify that servo code works
+except KeyboardInterrupt:
+    CameraServo.Teardown()
+
 #TestTrackingSpeed()	#use this when we want to test the 0.1 second tracking speed requirement
 
 LaserLocation = DotFinder.ReturnRedDotCenter()

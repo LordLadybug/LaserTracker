@@ -24,6 +24,7 @@ TrackingWindow.rowconfigure(6, weight=1)
 #measurement number displayed at bottom of window
 measureNo = StringVar()
 Measurement = ttk.Label(TrackingWindow, text = "Measurement:  ")
+Measurement['textvariable'] = measureNo
 #measureNo.set("Measurement:  " + str(RulerMeasurement.measurement) + RulerMeasurement.units)
 Measurement.grid(row=4, column=4, sticky=(E, S))
 
