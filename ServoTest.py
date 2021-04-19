@@ -2,7 +2,6 @@ import ServoControl
 import RPi.GPIO as GPIO
 import time
 
-GPIO.cleanup()
 
 def Swivel(pwm):
     k=0

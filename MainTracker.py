@@ -4,13 +4,15 @@ import DotFinder
 import RulerMeasurement
 import timeit
 
+CameraServo = ServoControl.Servo(27)
+
 def CenterCameraonRedDot(LaserLocation):
     Camera_dims = DotFinder.Camera_res()
     Camera_width = Camera_dims[0]
     #Calculate center from frame data
     #LaserLocation comes back as pair of integer coords within camera frame
     HorizontalError = (LaserLocation[0] - Camera_width/2) / (Camera_width/2) #relative error
-    ServoControl.CorrectCameraPosition(PWM, HorizontalError)
+    ServoControl.CorrectCameraPosition(CameraServo, HorizontalError)
     
 def TestTrackingSpeed():
     ServoTest.Swivel(PWM) #randomize location
@@ -46,7 +48,6 @@ def DisplayMeasurement():
 
 #some quick self-tests
 try:
-    CameraServo = ServoControl.Servo(27)
     ServoTest.Swivel(CameraServo.pwm) #done just to verify that servo code works
 except KeyboardInterrupt:
     CameraServo.Teardown()

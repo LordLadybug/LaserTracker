@@ -1,7 +1,6 @@
 import RPi.GPIO as GPIO
 import time
 class Servo():
-#consider rolling both of these into def __init__(self, pin)
     def __init__(self, servopin):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(servopin, GPIO.OUT)
@@ -22,7 +21,7 @@ class Servo():
         MaxAngle = 180		#maximum angle for a typical servo in degrees
 
         def AngleToDutyCycle(self, Angle):
-            return (self.MaxDutyCycle-self.MinDutyCycle) * (self.MaxAngle-Angle) / (self.MaxAngle-self.MinAngle)
+            return (Servo.ServoAngle.MaxDutyCycle-Servo.ServoAngle.MinDutyCycle)*(Servo.ServoAngle.MaxAngle-Angle) / (Servo.ServoAngle.MaxAngle-Servo.ServoAngle.MinAngle)
 
         def DutyCycleToAngle(self, DutyCycle):
             return (self.MaxAngle-self.MinAngle) * (self.MaxDutyCycle - DutyCycle) / (self.MaxDutyCycle - self.MinDutyCycle)
@@ -32,12 +31,12 @@ class Servo():
             input(self.MaxDutyCycle, "What is the maximum duty cycle?")
 
     def SwivelToAngle(self, Angle):
-        self.pwm.ChangeDutyCycle(AngletoDutyCycle(Angle))
+        self.pwm.ChangeDutyCycle(Servo.ServoAngle.AngleToDutyCycle(self, Angle))
 
 
 
-def CorrectCameraPosition(pwm, HorizontalError):
-    ErrorToDutyCycle = (MaxDutyCycle-MinDutyCycle)*HorizontalError/2 + (MaxDutyCycle+MinDutyCycle)/2
-    pwm.ChangeDutyCycle(ErrorToDutyCycle)
+def CorrectCameraPosition(Servo, HorizontalError):
+    #ErrorToDutyCycle = (MaxDutyCycle-MinDutyCycle)*HorizontalError/2 + (MaxDutyCycle+MinDutyCycle)/2
+    Servo.SwivelToAngle(HorizontalError)
 
 
